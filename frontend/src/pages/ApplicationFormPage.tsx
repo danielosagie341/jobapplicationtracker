@@ -183,6 +183,7 @@ const ApplicationFormPage: React.FC = () => {
     setValue('companyName', company.name);
     setValue('companyLocation', company.location || '');
     setShowNewCompany(false);
+    console.log(showNewCompany)
   };
 
   useEffect(() => {
