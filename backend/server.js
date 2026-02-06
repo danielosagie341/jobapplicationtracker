@@ -78,8 +78,10 @@ const startServer = async () => {
 
         // Sync database models (in development)
         // Sync database models
-        // Using alter: true to update schema if it changes
-        await sequelize.sync({ alter: true });
+        // Using force: true temporarily to fix initial schema creation issues with ENUMs
+        // TODO: Change back to alter: true after first successful deployment
+        const syncOptions = process.env.NODE_ENV === 'production' ? { force: true } : { alter: true };
+        await sequelize.sync(syncOptions);
         console.log('✅ Database models synchronized.');
 
         // Start server
