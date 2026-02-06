@@ -1,17 +1,35 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
-const sequelize = new Sequelize({
-    dialect: process.env.DB_DIALECT || 'sqlite',
-    storage: process.env.DB_STORAGE || './database.sqlite',
-    logging: process.env.NODE_ENV === 'development' ? console.log : false,
-    pool: {
-        max: 5,
-        min: 0,
-        acquire: 30000,
-        idle: 10000
-    }
-});
+const sequelize = process.env.DATABASE_URL 
+    ? new Sequelize(process.env.DATABASE_URL, {
+        dialect: 'postgres',
+        protocol: 'postgres',
+        logging: process.env.NODE_ENV === 'development' ? console.log : false,
+        dialectOptions: {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false
+            }
+        },
+        pool: {
+            max: 5,
+            min: 0,
+            acquire: 30000,
+            idle: 10000
+        }
+    })
+    : new Sequelize({
+        dialect: process.env.DB_DIALECT || 'sqlite',
+        storage: process.env.DB_STORAGE || './database.sqlite',
+        logging: process.env.NODE_ENV === 'development' ? console.log : false,
+        pool: {
+            max: 5,
+            min: 0,
+            acquire: 30000,
+            idle: 10000
+        }
+    });
 
 // Import models
 const User = require('./User')(sequelize);

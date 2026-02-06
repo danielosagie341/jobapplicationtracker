@@ -77,10 +77,10 @@ const startServer = async () => {
         console.log('✅ Database connection established successfully.');
 
         // Sync database models (in development)
-        if (process.env.NODE_ENV !== 'production') {
-            await sequelize.sync({ alter: false, force: false });
-            console.log('✅ Database models synchronized.');
-        }
+        // Sync database models
+        // Using alter: true to update schema if it changes
+        await sequelize.sync({ alter: true });
+        console.log('✅ Database models synchronized.');
 
         // Start server
         app.listen(PORT, () => {
